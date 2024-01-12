@@ -10,11 +10,32 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/style.css" rel="stylesheet">
-
-
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     </head>
     <body>
-        Count {{ .Count }}
+       {{ template "form" . }}
+       <hr>
+       {{ template "display" . }}
     </body>
 </html>
 {{end}}
+
+{{ block "form" . }}
+    <form hx-swap="outerHTML" hx-target="#contacts" hx-post="/contacts">
+        name: <input name="name" type="text" />
+        email: <input type="email" name="email" />
+        <button type="submit">Create contact</button>
+    </form>
+{{end}}
+
+{{ block "display" . }}
+    <div id="contacts" style="display: flex; flex-direction: column;">
+        {{ range .Contacts }}
+        <div>
+            Name: <span>{{ .Name }}</span>
+            Email: <span>{{ .Email }}</span>
+        </div>
+        {{ end }}
+
+    </div>
+{{ end }}
